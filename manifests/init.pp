@@ -37,7 +37,7 @@ class puppetdb(
   $puppetdb_service          = $puppetdb::params::puppetdb_service,
   $puppetdb_service_status   = $puppetdb::params::puppetdb_service_status,
   $open_postgres_port        = $puppetdb::params::open_postgres_port,
-  $manage_redhat_firewall    = $puppetdb::params::manage_redhat_firewall,
+  $manage_firewall           = $puppetdb::params::manage_firewall,
   $confdir                   = $puppetdb::params::confdir,
   $java_args                 = {}
 ) inherits puppetdb::params {
@@ -77,8 +77,8 @@ class puppetdb(
     fail("puppetdb_service_status valid values are 'true', 'running', 'false', and 'stopped'. You provided '${puppetdb_service_status}'")
   }
 
-  if ($manage_redhat_firewall != undef) {
-    notify {'Deprecation notice: `$manage_redhat_firewall` has been deprecated in `puppetdb` class and will be removed in a future version. Use $open_ssl_listen_port and $open_postgres_port instead.':}
+  if ($manage_firewall != undef) {
+    notify {'Deprecation notice: `$manage_firewall` has been deprecated in `puppetdb` class and will be removed in a future version. Use $open_ssl_listen_port and $open_postgres_port instead.':}
   }
 
   class { 'puppetdb::server':
@@ -102,16 +102,16 @@ class puppetdb(
     puppetdb_version        => $puppetdb_version,
     puppetdb_service        => $puppetdb_service,
     puppetdb_service_status => $puppetdb_service_status,
-    manage_redhat_firewall  => $manage_redhat_firewall,
+    manage_firewall  => $manage_firewall,
     confdir                 => $confdir,
     java_args               => $java_args,
   }
 
   if ($database == 'postgres') {
     class { 'puppetdb::database::postgresql':
-      manage_redhat_firewall => $manage_redhat_firewall ? {
-        true                 => $manage_redhat_firewall,
-        false                => $manage_redhat_firewall,
+      manage_firewall => $manage_firewall ? {
+        true                 => $manage_firewall,
+        false                => $manage_firewall,
         undef                => $open_postgres_port,
       },
       listen_addresses       => $puppetdb::params::postgres_listen_addresses,

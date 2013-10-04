@@ -7,19 +7,19 @@ class puppetdb::params {
   $ssl_listen_port           = '8081'
   $disable_ssl               = false
   # This technically defaults to 'true', but in order to preserve backwards
-  # compatibility with the deprecated 'manage_redhat_firewall' parameter, we
+  # compatibility with the deprecated 'manage_firewall' parameter, we
   # need to specify 'undef' as the default so that we can tell whether or
   # not the user explicitly specified a value.  See implementation in
   # `firewall.pp`.  We should change this back to `true` when we get rid
-  # of `manage_redhat_firewall`.
+  # of `manage_firewall`.
   $open_ssl_listen_port      = undef
   $postgres_listen_addresses = 'localhost'
   # This technically defaults to 'true', but in order to preserve backwards
-  # compatibility with the deprecated 'manage_redhat_firewall' parameter, we
+  # compatibility with the deprecated 'manage_firewall' parameter, we
   # need to specify 'undef' as the default so that we can tell whether or
   # not the user explicitly specified a value.  See implementation in
   # `postgresql.pp`.  We should change this back to `true` when we get rid
-  # of `manage_redhat_firewall`.
+  # of `manage_firewall`.
   $open_postgres_port        = undef
 
   $database                  = 'postgres'
@@ -39,7 +39,7 @@ class puppetdb::params {
   $puppetdb_version       = 'present'
 
   # TODO: figure out a way to make this not platform-specific
-  $manage_redhat_firewall = undef
+  $manage_firewall = undef
 
   $gc_interval            = '60'
 

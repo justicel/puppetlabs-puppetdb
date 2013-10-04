@@ -44,7 +44,7 @@ class puppetdb::server(
   $puppetdb_version        = $puppetdb::params::puppetdb_version,
   $puppetdb_service        = $puppetdb::params::puppetdb_service,
   $puppetdb_service_status = $puppetdb::params::puppetdb_service_status,
-  $manage_redhat_firewall  = $puppetdb::params::manage_redhat_firewall,
+  $manage_firewall         = $puppetdb::params::manage_firewall,
   $confdir                 = $puppetdb::params::confdir,
   $java_args               = {}
 ) inherits puppetdb::params {
@@ -95,7 +95,7 @@ class puppetdb::server(
     open_http_port         => $open_listen_port,
     ssl_port               => $ssl_listen_port,
     open_ssl_port          => $open_ssl_listen_port,
-    manage_redhat_firewall => $manage_redhat_firewall
+    manage_firewall => $manage_firewall
   }
 
   class { 'puppetdb::server::database_ini':

@@ -40,33 +40,30 @@
 class puppetdb::database::postgresql(
   # TODO: expose more of the parameters from `inkling/postgresql`!
   $listen_addresses       = $puppetdb::params::database_host,
-  $manage_redhat_firewall = $puppetdb::params::open_postgres_port,
+  $manage_firewall        = $puppetdb::params::open_postgres_port,
   $database_name          = $puppetdb::params::database_name,
   $database_username      = $puppetdb::params::database_username,
   $database_password      = $puppetdb::params::database_password,
 ) inherits puppetdb::params {
 
   # This technically defaults to 'true', but in order to preserve backwards
-  # compatibility with the deprecated 'manage_redhat_firewall' parameter, we
+  # compatibility with the deprecated 'manage_firewall' parameter, we
   # had to specify 'undef' as the default so that we could tell whether or
   # not the user explicitly specified a value. Here's where we're resolving
   # that and setting the 'real' default.  We should be able to get rid of
-  # this block when we remove `manage_redhat_firewall`.
-  if ($manage_redhat_firewall != undef) {
-    $final_manage_redhat_firewall = $manage_redhat_firewall
+  # this block when we remove `manage_firewall`.
+  if ($manage_firewall != undef) {
+    $final_manage_firewall = $manage_firewall
   } else {
-    $final_manage_redhat_firewall = true
+    $final_manage_firewall = true
   }
 
 
   # get the pg server up and running
   class { '::postgresql::server':
-    config_hash => {
-      # TODO: make this stuff configurable
-      'ip_mask_allow_all_users' => '0.0.0.0/0',
-      'listen_addresses'        => $listen_addresses,
-      'manage_redhat_firewall'  => $final_manage_redhat_firewall,
-    },
+    ip_mask_allow_all_users => '0.0.0.0/0',
+    listen_addresses        => $listen_addresses,
+    manage_firewall         => $final_manage_firewall,
   }
 
   # create the puppetdb database
